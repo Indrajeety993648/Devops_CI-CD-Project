@@ -1,186 +1,183 @@
 <div align="center">
 
-<!-- Animated Typing Header -->
-<a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=30&pause=1000&color=00D9FF&center=true&vCenter=true&width=600&lines=Order+Management+System;CI%2FCD+Pipeline+Project;Kubernetes+Deployed;Production+Ready" alt="Typing SVG" /></a>
+<img src="https://capsule-render.vercel.app/api?type=venom&height=200&color=gradient&customColorList=0,2,2,5,30&text=Order%20Management%20System&fontSize=40&fontColor=fff&animation=twinkling"/>
 
-<br/><br/>
+<p>
+  <img src="https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring_Boot-3.2-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white"/>
+  <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white"/>
+</p>
 
-<!-- Tech Badges -->
-<img src="https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"/>
-<img src="https://img.shields.io/badge/Spring_Boot-3.2-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"/>
-<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"/>
-<img src="https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white"/>
-<img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white"/>
+<p>
+  <img src="https://img.shields.io/badge/Build-Passing-brightgreen?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Security-Scanned-blue?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Coverage-80%25-yellow?style=flat-square"/>
+</p>
 
-<br/><br/>
-
-<!-- Animated Line -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
+**🚀 Production-Grade Microservice with Complete CI/CD Pipeline**
 
 </div>
+
+---
 
 ## 🎯 About
 
-A **production-ready** e-commerce microservice with complete **CI/CD pipeline**, **security scanning**, and **Kubernetes deployment**.
+A **production-ready** Order Management System with:
 
-<div align="center">
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-</div>
+- ✅ Complete **CI/CD Pipeline** (9 stages)
+- ✅ **Security Scanning** (SAST + SCA + Container)
+- ✅ **Docker** containerization
+- ✅ **Kubernetes** deployment
+- ✅ **REST API** with Swagger docs
+
+---
 
 ## 🔄 CI/CD Pipeline
 
-<div align="center">
-```mermaid
-graph LR
-    A[📝 Code Push] --> B[🔍 Lint]
-    B --> C[🛡️ SAST]
-    C --> D[📦 SCA]
-    D --> E[🧪 Test]
-    E --> F[🔨 Build]
-    F --> G[🐳 Docker]
-    G --> H[🔎 Trivy]
-    H --> I[🚀 Push]
-    
-    style A fill:#e1f5fe
-    style I fill:#c8e6c9
-```
+| Stage | Tool | Purpose | Time |
+|:-----:|:-----|:--------|:----:|
+| 1️⃣ | **Checkstyle** | Code quality & formatting | 30s |
+| 2️⃣ | **CodeQL** | Security scan (SAST) | 2m |
+| 3️⃣ | **OWASP** | Dependency scan (SCA) | 3m |
+| 4️⃣ | **JUnit** | Unit tests | 1m |
+| 5️⃣ | **Maven** | Build JAR | 1m |
+| 6️⃣ | **Docker** | Build image | 2m |
+| 7️⃣ | **Trivy** | Container scan | 1m |
+| 8️⃣ | **Docker** | Push to DockerHub | 30s |
 
-</div>
+**Flow:** `Push → Lint → SAST → SCA → Test → Build → Docker → Scan → Deploy`
 
-| Stage | Tool | Purpose |
-|:-----:|:----:|---------|
-| 🔍 | Checkstyle | Code Quality |
-| 🛡️ | CodeQL | Security Scan (SAST) |
-| 📦 | OWASP | Dependency Scan (SCA) |
-| 🧪 | JUnit | Unit Tests |
-| 🐳 | Docker | Container Build |
-| 🔎 | Trivy | Container Scan |
-| 🚀 | DockerHub | Image Push |
+---
 
-<div align="center">
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-</div>
+## 🏗️ Architecture
+
+| Layer | Component | Technology |
+|:-----:|:----------|:-----------|
+| 🌐 | **API** | REST Controller |
+| ⚙️ | **Service** | Business Logic |
+| 💾 | **Repository** | JPA/Hibernate |
+| 🗄️ | **Database** | H2 / PostgreSQL |
+
+**Kubernetes Setup:**
+- 2 Pod replicas for high availability
+- Service with LoadBalancer
+- ConfigMap for environment variables
+- Health probes (liveness + readiness)
+
+---
+
+## 🔄 Order Lifecycle
+
+| Status | Next States | Description |
+|:------:|:------------|:------------|
+| 📝 **PENDING** | CONFIRMED, CANCELLED | New order created |
+| ✅ **CONFIRMED** | PROCESSING, CANCELLED | Payment verified |
+| ⚙️ **PROCESSING** | SHIPPED | Being prepared |
+| 🚚 **SHIPPED** | DELIVERED | In transit |
+| 📦 **DELIVERED** | - | Completed |
+| ❌ **CANCELLED** | - | Cancelled |
+
+---
 
 ## 🚀 Quick Start
+
+**Deploy to Kubernetes:**
 ```bash
-# Clone
 git clone https://github.com/indrajeetyadav89/order-management-system.git
-
-# Deploy to Kubernetes
+cd order-management-system
 ./deploy.sh
+```
 
-# Access
+**Test the API:**
+```bash
 curl http://localhost:8080/api/v1/orders/health
 ```
 
-<div align="center">
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-</div>
+**Cleanup:**
+```bash
+./cleanup.sh
+```
+
+---
 
 ## 📖 API Endpoints
 
 | Method | Endpoint | Description |
-|:------:|----------|-------------|
-| `POST` | `/api/v1/orders` | Create order |
-| `GET` | `/api/v1/orders` | Get all orders |
-| `GET` | `/api/v1/orders/{id}` | Get order by ID |
-| `PUT` | `/api/v1/orders/{id}/status` | Update status |
-| `PUT` | `/api/v1/orders/{id}/cancel` | Cancel order |
-| `DELETE` | `/api/v1/orders/{id}` | Delete order |
-| `GET` | `/api/v1/orders/health` | Health check |
+|:------:|:---------|:------------|
+| 🟢 **POST** | `/api/v1/orders` | Create order |
+| 🔵 **GET** | `/api/v1/orders` | Get all orders |
+| 🔵 **GET** | `/api/v1/orders/{id}` | Get by ID |
+| 🟡 **PUT** | `/api/v1/orders/{id}/status` | Update status |
+| 🔴 **DELETE** | `/api/v1/orders/{id}` | Delete order |
+| 💚 **GET** | `/api/v1/orders/health` | Health check |
 
-📚 **Swagger UI:** `http://localhost:8080/swagger-ui.html`
+**Swagger UI:** http://localhost:8080/swagger-ui.html
 
-<div align="center">
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-</div>
-
-## 🏗️ Architecture
-```
-┌─────────────────────────────────────────┐
-│           🌐 API Layer                  │
-│         (OrderController)               │
-└──────────────────┬──────────────────────┘
-                   │
-┌──────────────────▼──────────────────────┐
-│           ⚙️ Service Layer              │
-│    (OrderService + StateMachine)        │
-└──────────────────┬──────────────────────┘
-                   │
-┌──────────────────▼──────────────────────┐
-│           💾 Data Layer                 │
-│         (OrderRepository)               │
-└──────────────────┬──────────────────────┘
-                   │
-┌──────────────────▼──────────────────────┐
-│           🗄️ Database                   │
-│        (H2 / PostgreSQL)                │
-└─────────────────────────────────────────┘
-```
-
-<div align="center">
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-</div>
+---
 
 ## 🛡️ Security
 
-| Layer | Tool | Scans |
-|:-----:|:----:|-------|
-| 🔍 SAST | CodeQL | Your Code |
-| 📦 SCA | OWASP | Dependencies |
-| 🐳 Trivy | Scanner | Container |
+| Type | Tool | What it Scans |
+|:----:|:-----|:--------------|
+| 🔍 **SAST** | CodeQL | Your source code |
+| 📦 **SCA** | OWASP | Dependencies |
+| 🐳 **Container** | Trivy | Docker image |
 
-<div align="center">
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-</div>
+---
 
-## 📂 Structure
+## 📂 Project Structure
 ```
-📦 order-management-system
-├── 📂 .github/workflows/ci.yml    # CI/CD Pipeline
-├── 📂 src/main/java               # Application Code
-├── 📂 src/test/java               # Tests
-├── 📂 k8s/                        # Kubernetes Manifests
-├── 📄 Dockerfile                  # Container Build
-├── 📄 deploy.sh                   # Deploy Script
-└── 📄 cleanup.sh                  # Cleanup Script
+order-management-system/
+├── .github/workflows/ci.yml    # CI/CD Pipeline
+├── src/main/java/              # Application code
+├── src/test/java/              # Unit tests
+├── k8s/                        # Kubernetes manifests
+├── Dockerfile                  # Container build
+├── deploy.sh                   # Deploy script
+└── cleanup.sh                  # Cleanup script
 ```
 
-<div align="center">
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-</div>
+---
 
-## ⚡ Commands
-```bash
-# Deploy
-./deploy.sh
-
-# View Pods
-kubectl get pods -n order-management
-
-# View Logs
-kubectl logs -f deployment/order-management-system -n order-management
-
-# Cleanup
-./cleanup.sh
-```
+## 🛠️ Tech Stack
 
 <div align="center">
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
+
+| Backend | DevOps | Database |
+|:-------:|:------:|:--------:|
+| Java 17 | Docker | H2 |
+| Spring Boot 3.2 | Kubernetes | PostgreSQL |
+| Maven | GitHub Actions | |
+
 </div>
+
+---
+
+## ⚡ Commands Reference
+
+| Command | Description |
+|:--------|:------------|
+| `./deploy.sh` | Deploy to Kubernetes |
+| `./cleanup.sh` | Remove deployment |
+| `kubectl get pods -n order-management` | View pods |
+| `kubectl logs -f deploy/order-management-system -n order-management` | View logs |
+
+---
+
+<div align="center">
 
 ## 👨‍💻 Author
 
-<div align="center">
-
 **Indrajeet Yadav**
 
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/indrajeetyadav89)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github)](https://github.com/indrajeetyadav89)
 
-<br/>
+---
 
-⭐ **Star this repo if you found it helpful!**
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,2,2,5,30&height=100&section=footer"/>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=100&section=footer"/>
+⭐ **Star this repo if it helped!**
 
 </div>
