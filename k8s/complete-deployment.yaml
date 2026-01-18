@@ -9,7 +9,7 @@ metadata:
   name: order-management-config
   namespace: order-management
 data:
-  SPRING_PROFILES_ACTIVE: "kubernetes"
+  SPRING_PROFILES_ACTIVE: 'kubernetes'
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -31,7 +31,7 @@ spec:
         runAsUser: 1001
       containers:
         - name: order-management-system
-          image: YOUR_DOCKERHUB_USERNAME/order-management-system:latest
+          image: indrajeetyadav89/order-management-system:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -40,11 +40,11 @@ spec:
                 name: order-management-config
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "250m"
+              memory: '256Mi'
+              cpu: '250m'
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: '512Mi'
+              cpu: '500m'
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
