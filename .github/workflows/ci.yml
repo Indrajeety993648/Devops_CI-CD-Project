@@ -201,3 +201,41 @@ jobs:
           docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+
+  # ============================================
+  # CD - Deploy to Kubernetes (Self-Hosted)
+  # ============================================
+  deploy:
+    name: 🚀 Deploy to Kubernetes
+    runs-on: [self-hosted, linux]
+    needs: [push]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Ensure Kind cluster exists
+        run: |
+          if ! kind get clusters 2>/dev/null | grep -q "order-cluster"; then
+            echo "Creating Kind cluster..."
+            kind create cluster --name order-cluster
+          else
+            echo "Cluster already exists"
+          fi
+
+      - name: Deploy to Kubernetes
+        run: kubectl apply -f k8s/complete-deployment.yaml
+
+      - name: Wait for Rollout
+        run: kubectl rollout status deployment/order-management-system -n order-management --timeout=180s
+
+      - name: Show Status
+        run: |
+          echo "Pods:"
+          kubectl get pods -n order-management
+          echo ""
+          echo "Services:"
+          kubectl get svc -n order-management
+          echo ""
+          echo "✅ Deployment Complete!"
