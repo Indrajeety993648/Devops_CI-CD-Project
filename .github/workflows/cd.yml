@@ -2,7 +2,7 @@ name: CD Pipeline
 
 on:
   workflow_run:
-    workflows: ["CI Pipeline"]
+    workflows: ['CI Pipeline']
     types:
       - completed
     branches: [main, master]
@@ -13,11 +13,11 @@ jobs:
     name: 🚀 Deploy to Kubernetes
     runs-on: [self-hosted, linux]
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-    
+
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-      
+
       - name: 🔍 Ensure Kind cluster exists
         run: |
           if ! kind get clusters 2>/dev/null | grep -q "order-cluster"; then
@@ -26,17 +26,17 @@ jobs:
           else
             echo "✅ Cluster already exists"
           fi
-      
+
       - name: 🚀 Deploy to Kubernetes
         run: |
           echo "Deploying to Kubernetes..."
           kubectl apply -f k8s/complete-deployment.yaml
-          
+
       - name: ⏳ Wait for Rollout
         run: |
           echo "Waiting for pods to be ready..."
           kubectl rollout status deployment/order-management-system -n order-management --timeout=180s
-      
+
       - name: 📋 Show Deployment Status
         run: |
           echo ""
@@ -47,60 +47,3 @@ jobs:
           kubectl get svc -n order-management
           echo ""
           echo "✅ Deployment Complete!"
-```
-
----
-
-## 📊 How It Will Look on GitHub
-
-**Before (One Pipeline):**
-```
-CI Pipeline
-├── lint
-├── sast
-├── sca
-├── test
-├── build
-├── docker-build
-├── image-scan
-├── container-test
-├── push
-└── deploy        ← Mixed with CI
-```
-
-**After (Two Pipelines):**
-```
-CI Pipeline                    CD Pipeline
-├── 🔍 lint                    └── 🚀 Deploy to Kubernetes
-├── 🛡️ sast                        (Triggered after CI succeeds)
-├── 📦 sca
-├── 🧪 test
-├── 🔨 build
-├── 🐳 docker-build
-├── 🔎 image-scan
-├── ✅ container-test
-└── 🚀 push
-```
-
----
-
-## 🎯 How It Works
-```
-┌────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│   git push                                                      │
-│      │                                                          │
-│      ▼                                                          │
-│   ┌─────────────────────────────────────────────────────────┐  │
-│   │   CI Pipeline (ci.yml) - GitHub Cloud                   │  │
-│   │   ✅ Lint → SAST → SCA → Test → Build → Docker → Push   │  │
-│   └─────────────────────────┬───────────────────────────────┘  │
-│                             │                                   │
-│                             │ triggers (on success)             │
-│                             ▼                                   │
-│   ┌─────────────────────────────────────────────────────────┐  │
-│   │   CD Pipeline (cd.yml) - Self-Hosted Runner             │  │
-│   │   🚀 Deploy to Kubernetes                                │  │
-│   └─────────────────────────────────────────────────────────┘  │
-│                                                                 │
-└────────────────────────────────────────────────────────────────┘
