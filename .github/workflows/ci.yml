@@ -13,7 +13,7 @@ env:
 
 jobs:
   lint:
-    name: Code Quality - Checkstyle
+    name: 🔍 Code Quality - Checkstyle
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +27,7 @@ jobs:
         run: mvn checkstyle:check -B
 
   sast:
-    name: SAST - CodeQL
+    name: 🛡️ SAST - CodeQL
     runs-on: ubuntu-latest
     permissions:
       security-events: write
@@ -49,7 +49,7 @@ jobs:
         uses: github/codeql-action/analyze@v3
 
   sca:
-    name: SCA - Dependency Check
+    name: 📦 SCA - Dependency Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -70,7 +70,7 @@ jobs:
           path: target/dependency-check-report.html
 
   test:
-    name: Unit Tests
+    name: 🧪 Unit Tests
     runs-on: ubuntu-latest
     needs: [lint]
     steps:
@@ -91,7 +91,7 @@ jobs:
           path: target/surefire-reports/
 
   build:
-    name: Build Application
+    name: 🔨 Build Application
     runs-on: ubuntu-latest
     needs: [test, sast, sca]
     steps:
@@ -111,7 +111,7 @@ jobs:
           path: target/*.jar
 
   docker-build:
-    name: Docker Build
+    name: 🐳 Docker Build
     runs-on: ubuntu-latest
     needs: [build]
     steps:
@@ -142,7 +142,7 @@ jobs:
           path: image.tar
 
   image-scan:
-    name: Container Scan - Trivy
+    name: 🔎 Container Scan - Trivy
     runs-on: ubuntu-latest
     needs: [docker-build]
     steps:
@@ -162,7 +162,7 @@ jobs:
           severity: 'CRITICAL,HIGH,MEDIUM'
 
   container-test:
-    name: Container Runtime Test
+    name: ✅ Container Runtime Test
     runs-on: ubuntu-latest
     needs: [docker-build]
     steps:
@@ -180,7 +180,7 @@ jobs:
           docker stop test-container
 
   push:
-    name: Push to DockerHub
+    name: 🚀 Push to DockerHub
     runs-on: ubuntu-latest
     needs: [image-scan, container-test]
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
@@ -201,41 +201,3 @@ jobs:
           docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
-
-  # ============================================
-  # CD - Deploy to Kubernetes (Self-Hosted)
-  # ============================================
-  deploy:
-    name: 🚀 Deploy to Kubernetes
-    runs-on: [self-hosted, linux]
-    needs: [push]
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Ensure Kind cluster exists
-        run: |
-          if ! kind get clusters 2>/dev/null | grep -q "order-cluster"; then
-            echo "Creating Kind cluster..."
-            kind create cluster --name order-cluster
-          else
-            echo "Cluster already exists"
-          fi
-
-      - name: Deploy to Kubernetes
-        run: kubectl apply -f k8s/complete-deployment.yaml
-
-      - name: Wait for Rollout
-        run: kubectl rollout status deployment/order-management-system -n order-management --timeout=180s
-
-      - name: Show Status
-        run: |
-          echo "Pods:"
-          kubectl get pods -n order-management
-          echo ""
-          echo "Services:"
-          kubectl get svc -n order-management
-          echo ""
-          echo "✅ Deployment Complete!"
