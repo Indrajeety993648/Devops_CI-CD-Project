@@ -153,7 +153,7 @@ public class OrderController {
     public ResponseEntity<HealthResponse> healthCheck() {
         HealthResponse health = HealthResponse.builder()
                 .status("UP")
-                .service("order-man-system")
+                .service("order-management-system")
                 .timestamp(LocalDateTime.now())
                 .version("1.2.0")
                 .build();
